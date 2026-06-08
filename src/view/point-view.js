@@ -3,6 +3,7 @@ import {
 } from '../utils/tasks.js';
 import AbstractView from '../framework/view/abstract-view.js';
 import flatpickr from 'flatpickr';
+import he from 'he';
 
 
 function createNewPointTemplate(point, destination, typeOffers) {
@@ -23,10 +24,9 @@ function createNewPointTemplate(point, destination, typeOffers) {
   const toDate = new Date(dateTo);
 
   const timeDuration = calculateDuration(fromDate, toDate);
-  const dateFromFormated = flatpickr.formatDate(fromDate, 'd M');
-  const timeFromFormated = flatpickr.formatDate(fromDate, 'G:i');
-  const timeToFormated = flatpickr.formatDate(toDate, 'G:i');
-
+  const dateFromFormated = flatpickr.formatDate(fromDate, 'M d');
+  const timeFromFormated = flatpickr.formatDate(fromDate, 'H:i');
+  const timeToFormated = flatpickr.formatDate(toDate, 'H:i');
 
   const selectedOffers = (typeOffers || []).filter((offer) => selectedOfferIds.includes(offer.id));
   const offersTemplate = selectedOffers.length > 0 ? `
@@ -34,7 +34,7 @@ function createNewPointTemplate(point, destination, typeOffers) {
     <ul class="event__selected-offers">
       ${selectedOffers.map((offer) => `
         <li class="event__offer">
-          <span class="event__offer-title">${offer.title}</span>
+          <span class="event__offer-title">${he.encode(offer.title)}</span>
           &plus;&euro;&nbsp;
           <span class="event__offer-price">${offer.price}</span>
         </li>

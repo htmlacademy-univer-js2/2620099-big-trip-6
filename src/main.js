@@ -73,6 +73,8 @@ Promise.all([
   pointsModel.init(),
   offersModel.init(),
   destinationsModel.init(),
-]).finally(() => {
+]).then(() => {
+  tripInfoPresenter.init();
+}).finally(() => {
   newEventButton.disabled = false;
 });

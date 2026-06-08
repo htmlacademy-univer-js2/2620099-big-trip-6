@@ -1,6 +1,6 @@
 import {remove, render, RenderPosition} from '../framework/render.js';
 import EditFormView from '../view/edit-form-view.js';
-import {UserAction, UpdateType} from '../const.js';
+import {UserAction, UpdateType, TYPE_POINTS} from '../const.js';
 
 export default class NewPointPresenter {
   #destinationsModel = null;
@@ -24,8 +24,19 @@ export default class NewPointPresenter {
       return;
     }
 
+    const defaultPoint = {
+      type: TYPE_POINTS[0],
+      destination: null,
+      dateFrom: null,
+      dateTo: null,
+      basePrice: 0,
+      offers: [],
+      isFavorite: false,
+      isNewPoint: true,
+    };
+
     this.#pointEditComponent = new EditFormView({
-      point: {},
+      point: defaultPoint,
       destinations: this.#destinationsModel.destinations,
       offers: this.#offersModel.offers,
       onFormSubmit: this.#handleFormSubmit,
@@ -95,7 +106,6 @@ export default class NewPointPresenter {
       }
     );
 
-    this.destroy();
   };
 
   #handleDeleteClick = () => {

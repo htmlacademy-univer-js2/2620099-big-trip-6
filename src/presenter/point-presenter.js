@@ -35,6 +35,12 @@ export default class PointPresenter {
   init(point) {
     this.#point = point;
 
+    const destinations = this.#destinationsModel.destinations;
+    if (!destinations || destinations.length === 0) {
+      setTimeout(() => this.init(point), 100);
+      return;
+    }
+
     const prevPointComponent = this.#pointComponent;
     const prevPointEditComponent = this.#pointEditComponent;
 
@@ -50,7 +56,7 @@ export default class PointPresenter {
       point,
       destinations: this.#destinationsModel.destinations,
       offers: this.#offersModel.offers,
-      onFormSubmit: this.#replaceFormToCard,
+      onFormSubmit: this.#handleFormSubmit,
       onArrowClick: this.#replaceFormToCard,
       onDeleteClick: this.#handleDeleteClick
     });
@@ -127,8 +133,17 @@ export default class PointPresenter {
       });
   };
 
+  #handleFormSubmit = (point) => {
+    this.#handleDataChange(
+      UserAction.UPDATE_POINT,
+      UpdateType.MINOR,
+      point,
+    );
+  };
+
 
   #replaceFormToCard = () => {
+    this.#pointEditComponent.reset(this.#point);
     replace(this.#pointComponent, this.#pointEditComponent);
     document.removeEventListener('keydown', this.#escKeyDownHandler);
     this.#mode = Mode.DEFAULT;

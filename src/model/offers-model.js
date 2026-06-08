@@ -1,8 +1,12 @@
-export default class OffersModel {
+import Observable from '../framework/observable.js';
+import { UpdateType } from '../const.js';
+
+export default class OffersModel extends Observable {
   #offers = [];
   #offersApiService = null;
 
   constructor({ offersApiService }) {
+    super();
     this.#offersApiService = offersApiService;
   }
 
@@ -11,7 +15,13 @@ export default class OffersModel {
   }
 
   async init() {
-    this.#offers = await this.#offersApiService.offers;
+    try {
+      const offers = await this.#offersApiService.offers;
+      this.#offers = offers;
+      this._notify(UpdateType.INIT);
+    } catch(err) {
+      this._notify(UpdateType.ERROR);
+    }
   }
 
   getOffersByType(type) {
@@ -20,9 +30,6 @@ export default class OffersModel {
   }
 
   getOffersById(type, itemsId) {
-    const offers = this.getOffersByType(type);
-    return offers.filter((item) =>
-      itemsId.includes(item.id)
-    );
+    return this.getOffersByType(type).filter((item) => itemsId.includes(item.id));
   }
 }

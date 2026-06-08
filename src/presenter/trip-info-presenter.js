@@ -53,6 +53,8 @@ export default class TripInfoPresenter {
     this.#offersModel = offersModel;
 
     this.#pointsModel.addObserver(this.#handleModelEvent);
+    this.#destinationsModel.addObserver(this.#handleModelEvent);
+    this.#offersModel.addObserver(this.#handleModelEvent);
   }
 
   get #points() {
@@ -63,7 +65,11 @@ export default class TripInfoPresenter {
     const destinationNames = [];
     const seenIds = new Set();
 
-    for (const point of this.#points) {
+    const sortedPoints = [...this.#points].sort(
+      (a, b) => new Date(a.dateFrom) - new Date(b.dateFrom)
+    );
+
+    for (const point of sortedPoints) {
       const destination = this.#destinationsModel.getDestinationById(point.destination);
       if (destination && !seenIds.has(point.destination)) {
         seenIds.add(point.destination);
