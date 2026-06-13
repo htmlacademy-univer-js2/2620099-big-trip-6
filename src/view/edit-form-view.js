@@ -200,7 +200,6 @@ export default class EditFormView extends AbstractStatefulView {
     this.#setEventListeners();
 
 
-    this._destroyDatepickers();
     this.#setDatepickerStart();
     this.#setDatepickerEnd();
   }
@@ -247,7 +246,7 @@ export default class EditFormView extends AbstractStatefulView {
 
 
   _setState(partialState) {
-    if (partialState.type && partialState.basePrice === undefined) {
+    if (partialState.type !== undefined && partialState.basePrice === undefined) {
       partialState.basePrice = this._state.basePrice;
     }
 
@@ -282,6 +281,7 @@ export default class EditFormView extends AbstractStatefulView {
 
     this.#setTypeChangeHandler();
     this.#setDestinationChangeHandler();
+    this.#setOffersChangeHandler();
   }
 
   #formSubmitHandler = (evt) => {

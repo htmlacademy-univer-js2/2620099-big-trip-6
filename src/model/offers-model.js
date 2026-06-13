@@ -25,7 +25,7 @@ export default class OffersModel extends Observable {
   }
 
   getOffersByType(type) {
-    const offers = this.#offers.find((o) => o.type === type);
+    const offers = this.#offers.find((item) => item.type === type);
     return offers ? offers.offers : [];
   }
 

@@ -43,6 +43,8 @@ export default class TripPresenter {
   #currentSortType = SortType.DAY;
   #filterType = FilterType.EVERYTHING;
 
+  #handleNewPointDestroyCallback = null;
+
   #uiBlocker = new UiBlocker({
     lowerLimit: TimeLimit.LOWER_LIMIT,
     upperLimit: TimeLimit.UPPER_LIMIT
@@ -52,7 +54,7 @@ export default class TripPresenter {
   #isLoadingError = false;
   #loadingCount = 3;
 
-  constructor({tripContainer, pointsModel, offersModel, destinationsModel, filterModel}) {
+  constructor({tripContainer, pointsModel, offersModel, destinationsModel, filterModel, onNewPointDestroy}) {
     this.#tripContainer = tripContainer;
     this.#eventsContainer = document.querySelector('.trip-events');
     this.#sortComponent = null;
@@ -66,6 +68,8 @@ export default class TripPresenter {
     this.#offersModel.addObserver(this.#handleModelEvent);
     this.#destinationsModel.addObserver(this.#handleModelEvent);
     this.#filterModel.addObserver(this.#handleModelEvent);
+
+    this.#handleNewPointDestroyCallback = onNewPointDestroy;
   }
 
   get points() {
@@ -172,6 +176,7 @@ export default class TripPresenter {
         newPointPresenter.setSaving();
         try {
           await this.#pointsModel.addPoint(updateType, update);
+          this.#newPointPresenter?.destroy();
         } catch(err) {
           newPointPresenter.setAborting();
         }
@@ -235,6 +240,7 @@ export default class TripPresenter {
 
   #handleNewPointDestroy = () => {
     this.#newPointPresenter = null;
+    this.#handleNewPointDestroyCallback?.();
 
     if (this.points.length === 0) {
       this.#renderNoPoints();

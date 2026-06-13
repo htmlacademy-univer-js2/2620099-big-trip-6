@@ -83,6 +83,11 @@ export default class NewPointPresenter {
 
 
   #handleFormSubmit = (point) => {
+    if (!point.destination) {
+      this.#pointEditComponent.shake();
+      return;
+    }
+
     const dateFrom = point.dateFrom
       ? new Date(point.dateFrom).toISOString()
       : new Date().toISOString();
@@ -95,14 +100,10 @@ export default class NewPointPresenter {
       UserAction.ADD_POINT,
       UpdateType.MINOR,
       {
-        type: point.type || 'flight',
-        destination: point.destination || '',
-        offers: point.offers || [],
-        basePrice: point.basePrice || 0,
-        isFavorite: point.isFavorite || false,
         ...point,
         dateFrom,
         dateTo,
+        isNewPoint: undefined,
       }
     );
 

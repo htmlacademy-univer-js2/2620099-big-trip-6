@@ -1,6 +1,6 @@
 import {
   calculateDuration,
-} from '../utils/tasks.js';
+} from '../utils/date.js';
 import AbstractView from '../framework/view/abstract-view.js';
 import flatpickr from 'flatpickr';
 import he from 'he';

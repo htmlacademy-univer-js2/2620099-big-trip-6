@@ -101,7 +101,7 @@ export default class TripInfoPresenter {
       const typeOffers = this.#offersModel.getOffersByType(point.type);
       if (typeOffers && point.offers) {
         for (const offerId of point.offers) {
-          const offer = typeOffers.find((o) => o.id === offerId);
+          const offer = typeOffers.find((item) => item.id === offerId);
           if (offer) {
             total += offer.price;
           }
